@@ -6,6 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 
 # 设置浏览器选项（Linux Server）
@@ -22,7 +24,11 @@ def setup_browser(chromedriver_path):
     options.add_argument("--remote-debugging-port=9222")  # 避免端口冲突
     options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0 Safari/537.36")
 
+    # 如果 chromedriver_path 为 None，则自动下载
+if chromedriver_path:
     service = Service(chromedriver_path)
+else:
+    service = ChromeService(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=options)
 
     # 隐藏自动化标识
@@ -243,7 +249,7 @@ def parse_table_data(driver):
 # 主程序入口
 def main():
     url = "https://rp5.ru/%E5%8D%97%E4%BA%AC%E5%B8%82(%E6%9C%BA%E5%9C%BA)%E5%8E%86%E5%8F%B2%E5%A4%A9%E6%B0%94_"
-    chromedriver_path = "/Users/qihuai/PycharmProjects/chromedriver-mac-arm64/chromedriver" #此处替代为匹配操作系统的驱动地址
+    chromedriver_path = None # Linux 下让 Selenium Manager 自动下载 chromedriver
     driver = setup_browser(chromedriver_path)
 
     try:
