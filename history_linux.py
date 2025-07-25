@@ -38,7 +38,6 @@ else:
         window.chrome = {runtime: {}};
         """
     })
-
     return driver
 
 # 等待元素可点击
