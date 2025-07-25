@@ -25,11 +25,11 @@ def setup_browser(chromedriver_path):
     options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0 Safari/537.36")
 
     # 如果 chromedriver_path 为 None，则自动下载
-if chromedriver_path:
-    service = Service(chromedriver_path)
-else:
-    service = ChromeService(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=options)
+    if chromedriver_path:
+        service = Service(chromedriver_path)
+    else:
+        service = ChromeService(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, options=options)
 
     # 隐藏自动化标识
     driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
