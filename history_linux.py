@@ -18,7 +18,6 @@ def setup_browser(chromedriver_path=None):
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-extensions")
     options.add_argument("--disable-images")
-    options.add_argument("--disable-javascript")
     options.add_argument("--user-data-dir=/tmp/chrome_user_data")
     options.add_argument("--remote-debugging-port=9222")
     options.add_argument(
