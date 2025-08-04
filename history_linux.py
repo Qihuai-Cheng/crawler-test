@@ -28,10 +28,13 @@ def setup_browser(chromedriver_path=None):
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0 Safari/537.36"
     )
 
-    driver = webdriver.Chrome(
-        service=ChromeService(ChromeDriverManager().install()),
-        options=options,
-    )
+    # 自动下载或使用指定 chromedriver
+    if chromedriver_path:
+        service = ChromeService(chromedriver_path)
+    else:
+        service = ChromeService(ChromeDriverManager().install())
+
+    driver = webdriver.Chrome(service=service, options=options)
     driver.set_page_load_timeout(30)
 
     # 隐藏自动化标识
