@@ -20,6 +20,9 @@ def setup_browser(chromedriver_path=None):
     options.add_argument("--disable-images")
     options.add_argument("--user-data-dir=/tmp/chrome_user_data")
     options.add_argument("--remote-debugging-port=9222")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
     options.add_argument(
         "user-agent=Mozilla/5.0 (X11; Linux x86_64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0 Safari/537.36"
