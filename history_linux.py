@@ -46,13 +46,13 @@ def setup_browser(chromedriver_path=None):
     return driver
 
 # 等待元素可点击
-def wait_for_clickable(driver, by, value, timeout=10):
+def wait_for_clickable(driver, by, value, timeout=20):
     return WebDriverWait(driver, timeout).until(
         EC.element_to_be_clickable((by, value))
     )
 
 # 等待元素存在
-def wait_for_presence(driver, by, value, timeout=10):
+def wait_for_presence(driver, by, value, timeout=20):
     return WebDriverWait(driver, timeout).until(
         EC.presence_of_element_located((by, value))
     )
