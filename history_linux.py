@@ -161,7 +161,7 @@ def main():
         print("切换到‘查阅历史天气’标签...")
         archive_tab = wait_for_clickable(driver, By.ID, "tabSynopArchive")
         driver.execute_script("arguments[0].click();", archive_tab)
-        time.sleep(2)
+        time.sleep(5)
 
         print("等待表格加载...")
         wait_for_presence(driver, By.ID, "archiveTable")
@@ -169,7 +169,7 @@ def main():
         print("点击‘仅最近7天’按钮...")
         seven_days_label = wait_for_clickable(driver, By.XPATH, '//label[@id="input_radio" and contains(., "7天")]')
         driver.execute_script("arguments[0].click();", seven_days_label)
-        time.sleep(2)
+        time.sleep(5)
 
         print("点击‘选择’按钮...")
         select_button = wait_for_clickable(driver, By.CSS_SELECTOR, "div.archButton > div.inner")
