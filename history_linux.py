@@ -28,21 +28,47 @@ def setup_browser(chromedriver_path=None):
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0 Safari/537.36"
     )
 
-    # 自动下载或使用指定 chromedriver
-    if chromedriver_path:
-        service = ChromeService(chromedriver_path)
-    else:
-        service = ChromeService(ChromeDriverManager().install())
-
-    driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome(
+        service=ChromeService(ChromeDriverManager().install()),
+        options=options,
+    )
+    driver.set_page_load_timeout(30)
 
     # 隐藏自动化标识
     driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
-        "source": """
-        delete navigator.__proto__.webdriver;
-        window.chrome = {runtime: {}};
-        """
-    })
+    "source": """
+        // 1. 隐藏 webdriver 属性
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => undefined,
+        });
+
+        // 2. 修复 chrome.runtime（保持原生功能）
+        window.chrome = {
+            ...window.chrome,
+            runtime: window.chrome?.runtime || {},
+        };
+
+        // 3. 隐藏 plugins 长度异常
+        Object.defineProperty(navigator, 'plugins', {
+            get: () => [1, 2, 3, 4, 5],  // 常见插件数量
+        });
+
+        // 4. 隐藏 languages 异常
+        Object.defineProperty(navigator, 'languages', {
+            get: () => ['zh-CN', 'zh', 'en-US', 'en'],
+        });
+
+        // 5. 隐藏 permissions 检测
+        const originalQuery = window.navigator.permissions?.query;
+        if (originalQuery) {
+            window.navigator.permissions.query = (parameters) => (
+                parameters.name === 'notifications'
+                    ? Promise.resolve({ state: Notification.permission })
+                    : originalQuery(parameters)
+            );
+        }
+    """
+})
     return driver
 
 # 等待元素可点击
